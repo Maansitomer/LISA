@@ -44,35 +44,6 @@ def groq_infer(llm, prompt):
     print(response.content)
     return response.content
 
-def generate_explanation_prompt(uploaded_file, question, result):
-    return f"""
-    Given the context of the dataset from {uploaded_file}, provide a thoughtful explanation of the following answer in simple English. Consider the original question and interpret the results in that context. Do not explain the SQL query itself.
-
-    Original question: {question}
-
-    Result:
-    {result}
-
-    Please explain:
-    1. What does this result mean in relation to the question asked?
-    2. What insights can we draw from this data?
-    3. Are there any notable patterns or anomalies in the result?
-    4. How might this information be useful or actionable?
-
-    Provide your explanation in a clear, concise manner that a non-technical person could understand.
-    """
-    
-def add_table_to_doc(doc, df):
-    table = doc.add_table(rows=1, cols=len(df.columns))
-    table.style = 'Table Grid'
-    hdr_cells = table.rows[0].cells
-    for i, column in enumerate(df.columns):
-        hdr_cells[i].text = str(column)
-    for row in df.itertuples():
-        row_cells = table.add_row().cells
-        for i, value in enumerate(row[1:], start=0):
-            row_cells[i].text = str(value)
-
 def format_markdown(text):
     # Remove asterisks for bullet points
     text = re.sub(r'^\s*\*\s*', '• ', text, flags=re.MULTILINE)
